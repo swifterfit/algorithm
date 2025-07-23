@@ -25,3 +25,15 @@ func reverseList(_ head: ListNode?) -> ListNode? {
     }
     return prev
 }
+
+// 递归
+func reverseList(_ head: ListNode?) -> ListNode? {
+    guard let head = head, let next = head.next else { 
+        return head
+    }
+    let newHead = reverseList(next)
+    next.next = head
+    head.next = nil
+    return newHead
+}
+    
