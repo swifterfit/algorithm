@@ -1,0 +1,32 @@
+# WCDB.objc 推荐的 Podfile 配置
+
+platform :ios, '9.0'
+use_frameworks!
+
+target 'YourProjectName' do
+  # WCDB.objc
+  pod 'WCDB.objc', '~> 1.0.8.2'
+  
+  # 其他依赖...
+end
+
+# 重要的 post_install 配置
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      # 禁用 Bitcode（WCDB 要求）
+      config.build_settings['ENABLE_BITCODE'] = 'NO'
+      
+      # 设置 C++ 标准
+      config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++14'
+      config.build_settings['CLANG_CXX_LIBRARY'] = 'libc++'
+      
+      # 设置最低部署目标
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '9.0'
+      
+      # 添加必要的编译标志
+      config.build_settings['OTHER_CPLUSPLUSFLAGS'] = '-std=c++14'
+      config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+    end
+  end
+end
